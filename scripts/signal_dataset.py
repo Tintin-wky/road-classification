@@ -24,7 +24,7 @@ class SIGNAL_DATASET(Dataset):
 
         # Read the signal from the CSV file
         signal = ImuSignal(pd.read_csv(file_path)['angular_velocity_z'])
-        features = signal.features
+        features = list(signal.features.values())
 
         return features, label
 
