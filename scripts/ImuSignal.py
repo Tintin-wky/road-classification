@@ -173,7 +173,7 @@ class ImuSignal:
 
 
 if __name__ == "__main__":
-    csv_file = '../data/018_001.csv'
+    csv_file = '../dataset/Bump/015_001.csv'
     df = pd.read_csv(csv_file)
     signal_data = df['angular_velocity_z']
     signal = ImuSignal(signal_data)
