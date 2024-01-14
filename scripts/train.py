@@ -4,15 +4,15 @@ from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.model_selection import train_test_split, KFold, cross_val_score, GridSearchCV
+from sklearn.model_selection import train_test_split, KFold, GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from signal_dataset import SIGNAL_DATASET
 
-scaler = StandardScaler()
 def preprocess(data, scale=True, pca=False, save=False):
     if scale is True:
+        scaler = StandardScaler()
         scaler.fit(data)
         if save:
             joblib.dump(scaler, '../models/scaler.joblib')

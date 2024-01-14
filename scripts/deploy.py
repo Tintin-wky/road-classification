@@ -5,8 +5,6 @@ import rospy
 from collections import deque
 from sensor_msgs.msg import Imu
 from std_msgs.msg import String
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 from ImuSignal import ImuSignal
 
 DATA_LEN = 200

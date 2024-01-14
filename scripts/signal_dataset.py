@@ -47,7 +47,8 @@ class SIGNAL_DATASET(Dataset):
 
 if __name__ == "__main__":
     dataset_dir = '../dataset'
-    dataset = SIGNAL_DATASET(dataset_dir)
+    chosen_labels = ['Stop', 'BrickRoad1', 'BrickRoad2', 'BrickRoad3', 'CarRoad']
+    dataset = SIGNAL_DATASET(chosen_labels=chosen_labels, dataset_dir=dataset_dir)
     dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
     for feature, label in dataloader:
         print(feature, label)
