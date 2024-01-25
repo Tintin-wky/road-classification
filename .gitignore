@@ -163,3 +163,4 @@ cython_debug/
 /rosbag
 /record
 /models
+/bags
