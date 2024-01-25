@@ -129,8 +129,8 @@ if __name__ == "__main__":
     dataset = SIGNAL_DATASET(chosen_labels=chosen_labels, dataset_dir=dataset_dir)
     algorithms = ['knn', 'svm', 'rf', 'lr']
     results = {algorithm:{} for algorithm in algorithms}
-    results['knn'] = classify('knn', features=preprocess(dataset.features, pca=True), labels=dataset.labels)
+    # results['knn'] = classify('knn', features=preprocess(dataset.features, pca=True), labels=dataset.labels)
     results['svm'] = classify('svm', features=preprocess(dataset.features), labels=dataset.labels)
-    results['rf'] = classify('rf', features=preprocess(dataset.features), labels=dataset.labels)
-    results['lr'] = classify('lr', features=preprocess(dataset.features), labels=dataset.labels)
+    # results['rf'] = classify('rf', features=preprocess(dataset.features), labels=dataset.labels)
+    # results['lr'] = classify('lr', features=preprocess(dataset.features), labels=dataset.labels)
     pprint.pprint(results)

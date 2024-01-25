@@ -25,6 +25,10 @@ class SIGNAL_DATASET(Dataset):
                     file_path = os.path.join(root, file)
                     df = pd.read_csv(file_path)
                     features_matrix = []
+                    # signal = ImuSignal(df['angular_velocity_z'])
+                    # features_matrix.append(list(signal.features.values()))
+                    # signal = ImuSignal(df['linear_acceleration_z'])
+                    # features_matrix.append(list(signal.features.values()))
                     for col in df.columns[1:]:
                         signal = ImuSignal(df[col])
                         features_matrix.append(list(signal.features.values()))
@@ -49,7 +53,8 @@ if __name__ == "__main__":
     dataset_dir = '../dataset'
     chosen_labels = ['Stop', 'BrickRoad1', 'BrickRoad2', 'BrickRoad3', 'CarRoad']
     dataset = SIGNAL_DATASET(chosen_labels=chosen_labels, dataset_dir=dataset_dir)
-    dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-    for feature, label in dataloader:
-        print(feature, label)
-        break
+    print(dataset.__len__())
+    # dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
+    # for feature, label in dataloader:
+    #     print(feature, label)
+    #     break
