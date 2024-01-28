@@ -1,31 +1,27 @@
 import pprint
 import joblib
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV
+from sklearn.model_selection import train_test_split, KFold, GridSearchCV, StratifiedShuffleSplit
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from signal_dataset import SIGNAL_DATASET
 
-def preprocess(data, scale=True, pca=False, save=False):
-    if scale is True:
-        scaler = StandardScaler()
-        scaler.fit(data)
-        if save:
-            joblib.dump(scaler, '../models/scaler.joblib')
-        data_scaled = scaler.transform(data)
-        if pca is True:
-            pca = PCA(n_components=0.99)
-            data_pca = pca.fit_transform(data_scaled)
-            return data_pca
-        else:
-            return data_scaled
+def confusion_matrix_visualization(y_true, y_pred):
+    cm = confusion_matrix(y_true, y_pred)
+    sns.heatmap(cm, annot=True, fmt='g')
+    plt.xlabel('Predicted labels')
+    plt.ylabel('True labels')
+    plt.title('Confusion Matrix')
+    plt.show()
 
 
-def classify(algorithm, features, labels, detail=False, save=False):
+def classify(algorithm, features, labels, detail=True, save=True, scoring='accuracy'):
     x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=31)
     kf = KFold(n_splits=10, shuffle=True, random_state=42)
     if detail:
@@ -36,7 +32,7 @@ def classify(algorithm, features, labels, detail=False, save=False):
             'n_neighbors': range(3, 16),
             'weights': ['distance', None]
         }
-        grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=kf, scoring='accuracy')
+        grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=kf, scoring=scoring)
         grid_search.fit(x_train, y_train)
         best_params = grid_search.best_params_
         best_score = grid_search.best_score_
@@ -49,17 +45,26 @@ def classify(algorithm, features, labels, detail=False, save=False):
             joblib.dump(best_knn, '../models/knn.joblib')
         y_pred = best_knn.predict(x_test)
         if detail:
-            print(confusion_matrix(y_test, y_pred))
+            confusion_matrix_visualization(y_test, y_pred)
             print(classification_report(y_test, y_pred, zero_division=0))
-        return {'model':best_knn, 'precision':classification_report(y_test, y_pred, output_dict=True, zero_division=0)['weighted avg']['precision']}
+        report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
+        return {'model': best_knn,
+                'accuracy': report['accuracy'],
+                'precision': report['weighted avg']['precision']
+                }
     elif algorithm == 'svm':
         svm = SVC()
+        # param_grid = {
+        #     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+        #     'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
+        #     'gamma': ['scale', 'auto']
+        # }
         param_grid = {
-            'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
-            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-            'gamma': ['scale', 'auto']
+            'kernel': ['rbf'],
+            'C': [0.01, 0.1, 1, 10, 100, 1000],
+            'gamma': [0.0001, 0.001, 0.01, 0.1, 1, 10]
         }
-        grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=kf, scoring='accuracy')
+        grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=kf, scoring=scoring)
         grid_search.fit(x_train, y_train)
         best_params = grid_search.best_params_
         best_score = grid_search.best_score_
@@ -72,9 +77,13 @@ def classify(algorithm, features, labels, detail=False, save=False):
             joblib.dump(best_svm, '../models/svm.joblib')
         y_pred = best_svm.predict(x_test)
         if detail:
-            print(confusion_matrix(y_test, y_pred))
+            confusion_matrix_visualization(y_test, y_pred)
             print(classification_report(y_test, y_pred, zero_division=0))
-        return {'model':best_svm, 'precision':classification_report(y_test, y_pred, output_dict=True, zero_division=0)['weighted avg']['precision']}
+        report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
+        return {'model': best_svm,
+                'accuracy': report['accuracy'],
+                'precision': report['weighted avg']['precision']
+                }
     elif algorithm == 'rf':
         rf = RandomForestClassifier()
         param_grid = {
@@ -82,7 +91,7 @@ def classify(algorithm, features, labels, detail=False, save=False):
             'max_depth': [None, 10, 20],  # 树的最大深度
             'min_samples_split': [2, 5, 10]  # 分割内部节点所需的最小样本数
         }
-        grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=kf, scoring='accuracy')
+        grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=kf, scoring=scoring)
         grid_search.fit(x_train, y_train)
         best_params = grid_search.best_params_
         best_score = grid_search.best_score_
@@ -95,17 +104,21 @@ def classify(algorithm, features, labels, detail=False, save=False):
             joblib.dump(rf, '../models/rf.joblib')
         y_pred = best_rf.predict(x_test)
         if detail:
-            print(confusion_matrix(y_test, y_pred))
+            confusion_matrix_visualization(y_test, y_pred)
             print(classification_report(y_test, y_pred, zero_division=0))
-        return {'model':best_rf, 'precision':classification_report(y_test, y_pred, output_dict=True, zero_division=0)['weighted avg']['precision']}
+        report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
+        return {'model': best_rf,
+                'accuracy': report['accuracy'],
+                'precision': report['weighted avg']['precision']
+                }
     elif algorithm == 'lr':
         lr = LogisticRegression(multi_class='multinomial')
         param_grid = {
-            'max_iter': [1000],
-            'C': [0.1, 1, 10],  # 正则化强度的倒数
+            'max_iter': [3000],
+            'C': [0.1, 1, 10, 100],  # 正则化强度的倒数
             'solver': ['lbfgs']  # 优化算法
         }
-        grid_search = GridSearchCV(estimator=lr, param_grid=param_grid, cv=kf, scoring='accuracy')
+        grid_search = GridSearchCV(estimator=lr, param_grid=param_grid, cv=kf, scoring=scoring)
         grid_search.fit(x_train, y_train)
         best_params = grid_search.best_params_
         best_score = grid_search.best_score_
@@ -118,19 +131,25 @@ def classify(algorithm, features, labels, detail=False, save=False):
             joblib.dump(best_lr, '../models/lr.joblib')
         y_pred = best_lr.predict(x_test)
         if detail:
-            print(confusion_matrix(y_test, y_pred))
+            confusion_matrix_visualization(y_test, y_pred)
             print(classification_report(y_test, y_pred, zero_division=0))
-        return {'model':best_lr, 'precision':classification_report(y_test, y_pred, output_dict=True, zero_division=0)['weighted avg']['precision']}
+        report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
+        return {'model': best_lr,
+                'accuracy': report['accuracy'],
+                'precision': report['weighted avg']['precision']
+                }
 
 
 if __name__ == "__main__":
-    dataset_dir = '../dataset'
-    chosen_labels = ['Stop', 'BrickRoad1', 'BrickRoad2', 'BrickRoad3', 'CarRoad']
-    dataset = SIGNAL_DATASET(chosen_labels=chosen_labels, dataset_dir=dataset_dir)
+    dataset = SIGNAL_DATASET()
+    scaler = StandardScaler()
+    scaler.fit(dataset.features)
+    joblib.dump(scaler, '../models/scaler.joblib')
+    dataset.features_scaled = scaler.transform(dataset.features)
     algorithms = ['knn', 'svm', 'rf', 'lr']
-    results = {algorithm:{} for algorithm in algorithms}
-    # results['knn'] = classify('knn', features=preprocess(dataset.features, pca=True), labels=dataset.labels)
-    results['svm'] = classify('svm', features=preprocess(dataset.features), labels=dataset.labels)
-    # results['rf'] = classify('rf', features=preprocess(dataset.features), labels=dataset.labels)
-    # results['lr'] = classify('lr', features=preprocess(dataset.features), labels=dataset.labels)
+    results = {algorithm: {} for algorithm in algorithms}
+    results['knn'] = classify('knn', features=dataset.features_scaled_pca, labels=dataset.labels)
+    results['svm'] = classify('svm', features=dataset.features_scaled, labels=dataset.labels)
+    results['rf'] = classify('rf', features=dataset.features_scaled, labels=dataset.labels)
+    results['lr'] = classify('lr', features=dataset.features_scaled, labels=dataset.labels)
     pprint.pprint(results)

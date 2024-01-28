@@ -2,13 +2,23 @@ import argparse
 import joblib
 import numpy as np
 import rospy
-from collections import deque
+from collections import deque, Counter
 from sensor_msgs.msg import Imu
 from std_msgs.msg import String
 from ImuSignal import ImuSignal
 
 DATA_LEN = 200
+FILTER_LEN = 5
 signals = deque(maxlen=DATA_LEN)
+filters = deque(maxlen=FILTER_LEN)
+
+
+def get_most_frequent_recent_element(d):
+    element_counts = Counter(d)
+    max_occurrence = max(element_counts.values())
+    for element in reversed(d):
+        if element_counts[element] == max_occurrence:
+            return element
 
 
 def imu_callback(msg):
@@ -45,7 +55,9 @@ def main(args: argparse.Namespace):
                 features_matrix.append(list(signal.features.values()))
             features = np.array(features_matrix).flatten().reshape(1,-1)
             features_scaled = scaler.transform(features)
-            label = model.predict(features_scaled)
+            filters.append(model.predict(features_scaled))
+            # label = get_most_frequent_recent_element(filters)
+            label = filters[-1]
             rospy.loginfo("Predicted class: %s", label)
             road_type = "%s" % label
             road_type_publisher.publish(road_type)

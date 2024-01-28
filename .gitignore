@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 /dataset
-/rosbag
+/raw
 /record
 /models
 /bags
