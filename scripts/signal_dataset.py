@@ -68,7 +68,9 @@ class SIGNAL_DATASET(Dataset):
                     for col in df.columns[1:]:
                     # for col in df.columns[3:]:
                     # for col in df.columns[4:]:
-                    # for col in [df.columns[i] for i in [1, 2, 3, 6]]:
+                    # for col in [df.columns[i] for i in [3, 6]]:
+                    # for col in [df.columns[i] for i in [2, 6]]:
+                    # for col in [df.columns[i] for i in [1, 6]]:
                         signal = ImuSignal(df[col])
                         features_matrix.append(list(signal.features.values()))
                     features.append(np.array(features_matrix).flatten())

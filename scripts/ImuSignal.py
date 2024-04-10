@@ -173,9 +173,12 @@ class ImuSignal:
 
 
 if __name__ == "__main__":
-    csv_file = '../dataset/Bump/015_001.csv'
+    # csv_file = '../dataset/carroad/014_003.csv'
+    # csv_file = '../dataset/brick-e/brick_2024-01-28-17-35-48_020.csv'
+    # csv_file = '../dataset/floor/floor1_2024-01-25-14-42-44_008.csv'
+    csv_file = '../dataset/brick-d/brick8_2024-01-25-16-11-13_034.csv'
     df = pd.read_csv(csv_file)
-    signal_data = df['angular_velocity_z']
+    signal_data = df['linear_acceleration_z']
     signal = ImuSignal(signal_data)
     signal.plot_time_domain()
     signal.plot_frequency_domain()
