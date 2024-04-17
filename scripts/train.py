@@ -141,11 +141,34 @@ def classify(algorithm, features, labels, detail=True, save=True, scoring='accur
 
 
 if __name__ == "__main__":
-    dataset = SIGNAL_DATASET()
-    scaler = StandardScaler()
-    scaler.fit(dataset.features)
-    joblib.dump(scaler, '../models/scaler.joblib')
-    dataset.features_scaled = scaler.transform(dataset.features)
+    # chosen_labels = ['board1', 'board2', 'board3']
+    # chosen_labels = ['board2', 'board3']
+    # chosen_labels = ['carroad1', 'carroad2', 'carroad3']
+    # chosen_labels = ['flat1', 'flat2', 'flat3', 'flat4', 'flat5', 'flat6']
+    # chosen_labels = ['flat5', 'flat6']
+    # chosen_labels = ['flat1', 'flat2', 'flat3', 'flat4', 'flat56']
+    # chosen_labels = ['flat1', 'flat4']
+    # chosen_labels = ['flat14', 'flat2', 'flat3', 'flat56']
+    # chosen_labels = ['flat14', 'flat2', 'flat3']
+    # chosen_labels = ['brick1-', 'brick2', 'brick3', 'brick4', 'brick5', 'brick6', 'brick7']
+    # chosen_labels = ['brick2', 'brick7']
+    # chosen_labels = ['brick1-', 'brick2', 'brick3', 'brick4', 'brick5', 'brick6']
+    # chosen_labels = ['brick1-', 'brick27', 'brick3', 'brick4', 'brick5', 'brick6']
+    # chosen_labels = ['brick1-', 'brick2']
+    # chosen_labels = ['brick1-', 'brick7']
+    # chosen_labels = ['brick12', 'brick3', 'brick4', 'brick5', 'brick6']
+
+    chosen_labels = ['stop', 'grass', 'dirt', 'floor-', 'playground', 'rideroad', 'runway']
+    chosen_labels += ['carroad3']
+    chosen_labels += ['board2', 'board3']
+    chosen_labels += ['flat14', 'flat2', 'flat3']
+    chosen_labels += ['brick12', 'brick3', 'brick4', 'brick5', 'brick6']
+    # chosen_labels += ['flat56']
+
+    # chosen_labels = ['rideroad', 'flat2']
+    # chosen_labels = ['playground', 'board2']
+
+    dataset = SIGNAL_DATASET(chosen_labels)
     algorithms = ['knn', 'svm', 'rf', 'lr']
     results = {algorithm: {} for algorithm in algorithms}
     results['knn'] = classify('knn', features=dataset.features_scaled_pca, labels=dataset.labels)

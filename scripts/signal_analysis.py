@@ -45,13 +45,14 @@ def visualize_domain(chosen_label, chosen_feature, number=10, dataset_dir='../da
 
 if __name__ == "__main__":
     plt.figure(figsize=(30, 30))
-    # chosen_labels = ['Stop', 'BrickRoad1', 'CarRoad', 'SpeedBump']
-    chosen_labels = ['CarRoad', 'BrickRoad1', 'BrickRoad2', 'BrickRoad3']
-    chosen_features = ['angular_velocity_z', 'linear_acceleration_z']
+    chosen_labels = ['flat14', 'flat2', 'flat3', 'floor-']
+    # chosen_labels = ['carroad3', 'board2', 'board3','stop']
+    # chosen_features = ['angular_velocity_x', 'angular_velocity_y']
+    chosen_features = ['linear_acceleration_x', 'linear_acceleration_y']
     figures = len(chosen_labels) * len(chosen_features) * 2
     for chosen_label in chosen_labels:
         for chosen_feature in chosen_features:
             visualize_domain(chosen_label, chosen_feature)
             visualize_frequency(chosen_label, chosen_feature)
-    plt.savefig("signal_analysis")
-    # plt.show()
+    # plt.savefig("signal_analysis")
+    plt.show()

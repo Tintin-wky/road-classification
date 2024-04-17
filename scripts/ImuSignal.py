@@ -72,7 +72,7 @@ class ImuSignal:
         return np.max(np.abs(self.time_signal))
 
     def square_mean_root(self):
-        return (np.sum(np.abs(self.time_signal) ** 2) / self.N) ** 2
+        return (np.sum(np.sqrt(np.abs(self.time_signal))) / self.N) ** 2
 
     def root_mean_square(self):
         return np.sqrt(np.mean(self.time_signal ** 2))
@@ -141,34 +141,41 @@ class ImuSignal:
     # Define a method to calculate all features and return as a dictionary
     def calculate_all_features(self):
         return {
-            "Mean amplitude": self.mean_amplitude(),
-            "Square root amplitude": self.square_root_amplitude(),
-            "Maximum value": self.max_value(),
-            "Minimum value": self.min_value(),
-            "Peak": self.peak(),
-            "Peak value": self.peak_value(),
-            "Square mean root": self.square_mean_root(),
-            "Root mean square": self.root_mean_square(),
-            "Crest factor": self.crest_factor(),
-            "Clearance factor": self.clearance_factor(),
+            # "Mean amplitude": self.mean_amplitude(),
+            # "Square root amplitude": self.square_root_amplitude(),
+            # "Peak": self.peak(),
+
+            # "Maximum value": self.max_value(),
+            # "Minimum value": self.min_value(),
+            # "Peak value": self.peak_value(),
+
+            # "Square mean root": self.square_mean_root(),
+            # "Root mean square": self.root_mean_square(),
+
+            # "Variance": self.variance(),
+            # "Standard deviation": self.standard_deviation(),
+
             "Kurtosis": self.kurtosis(),
-            "Variance": self.variance(),
-            "Standard deviation": self.standard_deviation(),
-            "Skewness": self.skewness(),
-            "Waveform factor": self.waveform_factor(),
-            "Pulse factor": self.pulse_factor(),
-            "Residual factor": self.residual_gap_factor(),
-            "Skewness factor": self.skewness_factor(),
-            "Peak factor": self.peak_factor(),
-            "Yield factor": self.yield_factor(),
+            # "Skewness": self.skewness(),
+
+            # "Crest factor": self.crest_factor(),
+            # "Clearance factor": self.clearance_factor(),
+            # "Waveform factor": self.waveform_factor(),
+            # "Pulse factor": self.pulse_factor(),
+            # "Residual factor": self.residual_gap_factor(),
+            # "Skewness factor": self.skewness_factor(),
+            # "Peak factor": self.peak_factor(),
+            # "Yield factor": self.yield_factor(),
+
             "Mean frequency": self.mean_frequency(),
             "Frequency center": self.frequency_center(),
-            "Variance of mean frequency": self.variance_of_mean_frequency(),
-            "Median frequency": self.median_frequency(),
-            "Peak frequency": self.peak_frequency(),
-            "Root mean square frequency": self.root_mean_square_frequency(),
-            "Mean square frequency": self.mean_square_frequency(),
-            "Root mean frequency square": self.root_mean_frequency_square()
+            # "Variance of mean frequency": self.variance_of_mean_frequency(),
+            # "Peak frequency": self.peak_frequency(),
+
+            # "Median frequency": self.median_frequency(),
+            # "Root mean square frequency": self.root_mean_square_frequency(),
+            # "Mean square frequency": self.mean_square_frequency(),
+            # "Root mean frequency square": self.root_mean_frequency_square()
         }
 
 

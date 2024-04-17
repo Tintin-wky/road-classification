@@ -9,7 +9,7 @@ imu_topic = '/imu/data_raw'  # 125Hz
 image_topic = '/camera/left/image_raw/compressed'
 DATA_LEN = 200
 # 设置要去除的秒数
-start_trim = 3  # 开始的几秒
+start_trim = 5  # 开始的几秒
 end_trim = 5    # 结束的几秒
 
 
