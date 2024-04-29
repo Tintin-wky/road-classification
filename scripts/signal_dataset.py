@@ -68,6 +68,7 @@ class SIGNAL_DATASET():
                     file_path = os.path.join(root, file)
                     df = pd.read_csv(file_path)
                     features_matrix = []
+
                     linear_acceleration_z = ImuSignal(df['linear_acceleration_z'])
                     features_matrix.extend([
                         # linear_acceleration_z.kurtosis(),

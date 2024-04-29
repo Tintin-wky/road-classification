@@ -1,5 +1,4 @@
 import rosbag
-import pandas as pd
 import argparse
 import os
 import io
@@ -31,39 +30,39 @@ def main(args: argparse.Namespace):
                 obs_img.save(img_file)
                 print(f'Image from rosbag {bag_name} has been successfully saved to "{img_file}".')
                 break  # 只保存第一帧图像
-        for topic, msg, t in bag.read_messages(topics=[imu_topic]):
-            if start_time <= t.to_sec() <= end_time:
-                if count < DATA_LEN:
-                    angular_velocity_x = msg.angular_velocity.x
-                    angular_velocity_y = msg.angular_velocity.y
-                    angular_velocity_z = msg.angular_velocity.z
-                    linear_acceleration_x = msg.linear_acceleration.x
-                    linear_acceleration_y = msg.linear_acceleration.y
-                    linear_acceleration_z = msg.linear_acceleration.z
-
-                    # 将数据添加到data列表
-                    data.append(
-                        [t.to_sec(), angular_velocity_x, angular_velocity_y, angular_velocity_z,
-                         linear_acceleration_x, linear_acceleration_y, linear_acceleration_z])
-                    # 将数据添加到data列表
-                    count += 1
-                else:
-                    # 创建DataFrame
-                    df = pd.DataFrame(data, columns=['timestamp', 'angular_velocity_x', 'angular_velocity_y',
-                                                     'angular_velocity_z', 'linear_acceleration_x', 'linear_acceleration_y',
-                                                     'linear_acceleration_z'])
-                    # 将DataFrame保存为CSV文件
-                    csv_file = os.path.join(args.dir, type_name, f"{bag_name}_{data_count:03}.csv")
-                    directory = os.path.dirname(csv_file)
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    df.to_csv(csv_file, index=False)
-
-                    print(f'Data from rosbag {bag_name} has been successfully converted to CSV and saved to "{csv_file}".')
-
-                    count = 0
-                    data_count += 1
-                    data = []
+        # for topic, msg, t in bag.read_messages(topics=[imu_topic]):
+        #     if start_time <= t.to_sec() <= end_time:
+        #         if count < DATA_LEN:
+        #             angular_velocity_x = msg.angular_velocity.x
+        #             angular_velocity_y = msg.angular_velocity.y
+        #             angular_velocity_z = msg.angular_velocity.z
+        #             linear_acceleration_x = msg.linear_acceleration.x
+        #             linear_acceleration_y = msg.linear_acceleration.y
+        #             linear_acceleration_z = msg.linear_acceleration.z
+        #
+        #             # 将数据添加到data列表
+        #             data.append(
+        #                 [t.to_sec(), angular_velocity_x, angular_velocity_y, angular_velocity_z,
+        #                  linear_acceleration_x, linear_acceleration_y, linear_acceleration_z])
+        #             # 将数据添加到data列表
+        #             count += 1
+        #         else:
+        #             # 创建DataFrame
+        #             df = pd.DataFrame(data, columns=['timestamp', 'angular_velocity_x', 'angular_velocity_y',
+        #                                              'angular_velocity_z', 'linear_acceleration_x', 'linear_acceleration_y',
+        #                                              'linear_acceleration_z'])
+        #             # 将DataFrame保存为CSV文件
+        #             csv_file = os.path.join(args.dir, type_name, f"{bag_name}_{data_count:03}.csv")
+        #             directory = os.path.dirname(csv_file)
+        #             if not os.path.exists(directory):
+        #                 os.makedirs(directory)
+        #             df.to_csv(csv_file, index=False)
+        #
+        #             print(f'Data from rosbag {bag_name} has been successfully converted to CSV and saved to "{csv_file}".')
+        #
+        #             count = 0
+        #             data_count += 1
+        #             data = []
 
 
 if __name__ == '__main__':

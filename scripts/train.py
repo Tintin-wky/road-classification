@@ -153,9 +153,9 @@ if __name__ == "__main__":
     # chosen_labels = ['brick1-', 'brick2', 'brick3', 'brick4', 'brick5', 'brick6', 'brick7']
     # chosen_labels = ['brick2', 'brick7']
     # chosen_labels = ['brick1-', 'brick2', 'brick3', 'brick4', 'brick5', 'brick6']
-    # chosen_labels = ['brick1-', 'brick27', 'brick3', 'brick4', 'brick5', 'brick6']
+    # chosen_labels = ['brick1-', 'brick23', 'brick4', 'brick5', 'brick6']
     # chosen_labels = ['brick1-', 'brick2']
-    # chosen_labels = ['brick1-', 'brick7']
+    # chosen_labels = ['brick2', 'brick3']
     # chosen_labels = ['brick12', 'brick3', 'brick4', 'brick5', 'brick6']
 
     chosen_labels = ['stop', 'grass', 'dirt', 'floor-', 'playground', 'rideroad', 'runway']
@@ -171,8 +171,8 @@ if __name__ == "__main__":
     dataset = SIGNAL_DATASET(chosen_labels)
     algorithms = ['knn', 'svm', 'rf', 'lr']
     results = {algorithm: {} for algorithm in algorithms}
-    results['knn'] = classify('knn', features=dataset.features_scaled_pca, labels=dataset.labels)
+    # results['knn'] = classify('knn', features=dataset.features_scaled_pca, labels=dataset.labels)
     results['svm'] = classify('svm', features=dataset.features_scaled, labels=dataset.labels)
-    results['rf'] = classify('rf', features=dataset.features_scaled, labels=dataset.labels)
-    results['lr'] = classify('lr', features=dataset.features_scaled, labels=dataset.labels)
-    pprint.pprint(results)
+    # results['rf'] = classify('rf', features=dataset.features_scaled, labels=dataset.labels)
+    # results['lr'] = classify('lr', features=dataset.features_scaled, labels=dataset.labels)
+    pprint.pprint(results['svm'])
