@@ -26,9 +26,9 @@ def visualize_frequency(chosen_label, chosen_feature, number=10, dataset_dir='..
     count += 1
 
 
-def visualize_domain(chosen_label, chosen_feature, number=10, dataset_dir='../dataset'):
+def visualize_domain(chosen_label, chosen_feature, number=30, dataset_dir='../dataset'):
     global count, figures
-    plt.subplot(4, figures // 4, count)
+    plt.subplot(3, figures // 3, count)
     for root, dirs, files in os.walk(dataset_dir):
         label = os.path.basename(root)
         if label != chosen_label:
@@ -44,15 +44,16 @@ def visualize_domain(chosen_label, chosen_feature, number=10, dataset_dir='../da
 
 
 if __name__ == "__main__":
-    plt.figure(figsize=(10, 16))
+    plt.figure(figsize=(8, 6))
     # chosen_labels = ['flat14', 'flat2', 'flat3', 'floor-']
-    chosen_labels = ['board2', 'board3']
-    # chosen_features = ['angular_velocity_x', 'angular_velocity_y']
-    chosen_features = ['linear_acceleration_z']
-    figures = len(chosen_labels) * len(chosen_features) * 2
+    chosen_labels = ['brick5']
+    chosen_features = ['angular_velocity_x', 'angular_velocity_y', 'angular_velocity_z']
+    chosen_features += ['linear_acceleration_x', 'linear_acceleration_y', 'linear_acceleration_z']
+    figures = len(chosen_labels) * len(chosen_features)
     for chosen_label in chosen_labels:
         for chosen_feature in chosen_features:
             visualize_domain(chosen_label, chosen_feature)
-            visualize_frequency(chosen_label, chosen_feature)
+            # visualize_frequency(chosen_label, chosen_feature)
+    plt.tight_layout(pad=0.2, w_pad=0.2, h_pad=0.2)
     plt.savefig("signal_analysis")
     plt.show()

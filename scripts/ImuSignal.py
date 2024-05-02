@@ -141,22 +141,22 @@ class ImuSignal:
     # Define a method to calculate all features and return as a dictionary
     def calculate_all_features(self):
         return {
-            # "Mean amplitude": self.mean_amplitude(),
-            # "Square root amplitude": self.square_root_amplitude(),
-            # "Peak": self.peak(),
+            "Mean amplitude": self.mean_amplitude(),
+            "Square root amplitude": self.square_root_amplitude(),
+            "Peak": self.peak(),
 
             # "Maximum value": self.max_value(),
             # "Minimum value": self.min_value(),
             # "Peak value": self.peak_value(),
-
+            #
             # "Square mean root": self.square_mean_root(),
             # "Root mean square": self.root_mean_square(),
-
+            #
             # "Variance": self.variance(),
             # "Standard deviation": self.standard_deviation(),
 
             "Kurtosis": self.kurtosis(),
-            # "Skewness": self.skewness(),
+            "Skewness": self.skewness(),
 
             # "Crest factor": self.crest_factor(),
             # "Clearance factor": self.clearance_factor(),
@@ -169,8 +169,8 @@ class ImuSignal:
 
             "Mean frequency": self.mean_frequency(),
             "Frequency center": self.frequency_center(),
-            # "Variance of mean frequency": self.variance_of_mean_frequency(),
-            # "Peak frequency": self.peak_frequency(),
+            "Variance of mean frequency": self.variance_of_mean_frequency(),
+            "Peak frequency": self.peak_frequency(),
 
             # "Median frequency": self.median_frequency(),
             # "Root mean square frequency": self.root_mean_square_frequency(),

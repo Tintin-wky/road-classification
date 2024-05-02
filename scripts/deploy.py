@@ -41,7 +41,7 @@ def main(args: argparse.Namespace):
     model = joblib.load(f'../models/{args.algorithm}.joblib')
     rospy.loginfo(f'Using {args.algorithm} Model {model}')
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(5)
     imu_data_subscriber = rospy.Subscriber("/imu/data_raw", Imu, imu_callback)
     road_type_publisher = rospy.Publisher("/road_type", String, queue_size=1)
 
@@ -50,48 +50,48 @@ def main(args: argparse.Namespace):
         if len(signals) == DATA_LEN:
             imu_data = np.array(list(signals))
 
-            features_matrix = []
-            linear_acceleration_z = ImuSignal(imu_data[:,5])
-            features_matrix.extend([
-                # linear_acceleration_z.kurtosis(),
-                linear_acceleration_z.mean_frequency(),
-                linear_acceleration_z.frequency_center()
-            ])
-            linear_acceleration_y = ImuSignal(imu_data[:,4])
-            features_matrix.extend([
-                linear_acceleration_y.kurtosis(),
-                linear_acceleration_y.mean_frequency(),
-                linear_acceleration_y.frequency_center()
-            ])
-            linear_acceleration_x = ImuSignal(imu_data[:,3])
-            features_matrix.extend([
-                linear_acceleration_x.kurtosis(),
-                linear_acceleration_x.mean_frequency(),
-                # linear_acceleration_x.frequency_center()
-            ])
-            angular_velocity_z = ImuSignal(imu_data[:,2])
-            features_matrix.extend([
-                # angular_velocity_z.kurtosis(),
-                # angular_velocity_z.mean_frequency(),
-                angular_velocity_z.frequency_center()
-            ])
-            angular_velocity_y = ImuSignal(imu_data[:,1])
-            features_matrix.extend([
-                # angular_velocity_y.kurtosis(),
-                # angular_velocity_y.mean_frequency(),
-                angular_velocity_y.frequency_center()
-            ])
-            angular_velocity_x = ImuSignal(imu_data[:,0])
-            features_matrix.extend([
-                # angular_velocity_x.kurtosis(),
-                # angular_velocity_x.mean_frequency(),
-                angular_velocity_x.frequency_center()
-            ])
-
             # features_matrix = []
-            # for i in range(imu_data.shape[1]):
-            #     signal = ImuSignal(imu_data[:,i])
-            #     features_matrix.append(list(signal.features.values()))
+            # linear_acceleration_z = ImuSignal(imu_data[:,5])
+            # features_matrix.extend([
+            #     # linear_acceleration_z.kurtosis(),
+            #     linear_acceleration_z.mean_frequency(),
+            #     linear_acceleration_z.frequency_center()
+            # ])
+            # linear_acceleration_y = ImuSignal(imu_data[:,4])
+            # features_matrix.extend([
+            #     linear_acceleration_y.kurtosis(),
+            #     linear_acceleration_y.mean_frequency(),
+            #     linear_acceleration_y.frequency_center()
+            # ])
+            # linear_acceleration_x = ImuSignal(imu_data[:,3])
+            # features_matrix.extend([
+            #     linear_acceleration_x.kurtosis(),
+            #     linear_acceleration_x.mean_frequency(),
+            #     # linear_acceleration_x.frequency_center()
+            # ])
+            # angular_velocity_z = ImuSignal(imu_data[:,2])
+            # features_matrix.extend([
+            #     # angular_velocity_z.kurtosis(),
+            #     # angular_velocity_z.mean_frequency(),
+            #     angular_velocity_z.frequency_center()
+            # ])
+            # angular_velocity_y = ImuSignal(imu_data[:,1])
+            # features_matrix.extend([
+            #     # angular_velocity_y.kurtosis(),
+            #     # angular_velocity_y.mean_frequency(),
+            #     angular_velocity_y.frequency_center()
+            # ])
+            # angular_velocity_x = ImuSignal(imu_data[:,0])
+            # features_matrix.extend([
+            #     # angular_velocity_x.kurtosis(),
+            #     # angular_velocity_x.mean_frequency(),
+            #     angular_velocity_x.frequency_center()
+            # ])
+
+            features_matrix = []
+            for i in range(imu_data.shape[1]):
+                signal = ImuSignal(imu_data[:,i])
+                features_matrix.append(list(signal.features.values()))
 
             features = np.array(features_matrix).flatten().reshape(1,-1)
             features_scaled = scaler.transform(features)

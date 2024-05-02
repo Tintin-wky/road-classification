@@ -44,11 +44,11 @@ feature_names = [
     "Mean square frequency",
     "Root mean frequency square"
 ]
-feature_names = [
-    "Kurtosis",
-    "Mean frequency",
-    "Frequency center"
-]
+# feature_names = [
+#     "Kurtosis",
+#     "Mean frequency",
+#     "Frequency center"
+# ]
 
 
 class SIGNAL_DATASET():
@@ -69,53 +69,53 @@ class SIGNAL_DATASET():
                     df = pd.read_csv(file_path)
                     features_matrix = []
 
-                    linear_acceleration_z = ImuSignal(df['linear_acceleration_z'])
-                    features_matrix.extend([
-                        # linear_acceleration_z.kurtosis(),
-                        linear_acceleration_z.mean_frequency(),
-                        linear_acceleration_z.frequency_center()
-                    ])
-                    linear_acceleration_y = ImuSignal(df['linear_acceleration_y'])
-                    features_matrix.extend([
-                        linear_acceleration_y.kurtosis(),
-                        linear_acceleration_y.mean_frequency(),
-                        linear_acceleration_y.frequency_center()
-                    ])
-                    linear_acceleration_x = ImuSignal(df['linear_acceleration_x'])
-                    features_matrix.extend([
-                        linear_acceleration_x.kurtosis(),
-                        linear_acceleration_x.mean_frequency(),
-                        # linear_acceleration_x.frequency_center()
-                    ])
-                    angular_velocity_z = ImuSignal(df['angular_velocity_z'])
-                    features_matrix.extend([
-                        # angular_velocity_z.kurtosis(),
-                        # angular_velocity_z.mean_frequency(),
-                        angular_velocity_z.frequency_center()
-                    ])
-                    angular_velocity_y = ImuSignal(df['angular_velocity_y'])
-                    features_matrix.extend([
-                        # angular_velocity_y.kurtosis(),
-                        # angular_velocity_y.mean_frequency(),
-                        angular_velocity_y.frequency_center()
-                    ])
-                    angular_velocity_x = ImuSignal(df['angular_velocity_x'])
-                    features_matrix.extend([
-                        # angular_velocity_x.kurtosis(),
-                        # angular_velocity_x.mean_frequency(),
-                        angular_velocity_x.frequency_center()
-                    ])
-                    features.append(np.array(features_matrix).flatten())
-
-                    # for col in df.columns[1:]: # 全特征
-                    # # for col in df.columns[1:4]: # 角速度特征
-                    # # for col in df.columns[4:]: # 加速度特征
-                    # # for col in df.columns[6:]: # z加速度特征
-                    # # for col in [df.columns[i] for i in [1]]:
-                    # # for col in [df.columns[i] for i in [3, 4, 5, 6]]:
-                    #     signal = ImuSignal(df[col])
-                    #     features_matrix.append(list(signal.features.values()))
+                    # linear_acceleration_z = ImuSignal(df['linear_acceleration_z'])
+                    # features_matrix.extend([
+                    #     # linear_acceleration_z.kurtosis(),
+                    #     linear_acceleration_z.mean_frequency(),
+                    #     linear_acceleration_z.frequency_center()
+                    # ])
+                    # linear_acceleration_y = ImuSignal(df['linear_acceleration_y'])
+                    # features_matrix.extend([
+                    #     linear_acceleration_y.kurtosis(),
+                    #     linear_acceleration_y.mean_frequency(),
+                    #     linear_acceleration_y.frequency_center()
+                    # ])
+                    # linear_acceleration_x = ImuSignal(df['linear_acceleration_x'])
+                    # features_matrix.extend([
+                    #     linear_acceleration_x.kurtosis(),
+                    #     linear_acceleration_x.mean_frequency(),
+                    #     # linear_acceleration_x.frequency_center()
+                    # ])
+                    # angular_velocity_z = ImuSignal(df['angular_velocity_z'])
+                    # features_matrix.extend([
+                    #     # angular_velocity_z.kurtosis(),
+                    #     # angular_velocity_z.mean_frequency(),
+                    #     angular_velocity_z.frequency_center()
+                    # ])
+                    # angular_velocity_y = ImuSignal(df['angular_velocity_y'])
+                    # features_matrix.extend([
+                    #     # angular_velocity_y.kurtosis(),
+                    #     # angular_velocity_y.mean_frequency(),
+                    #     angular_velocity_y.frequency_center()
+                    # ])
+                    # angular_velocity_x = ImuSignal(df['angular_velocity_x'])
+                    # features_matrix.extend([
+                    #     # angular_velocity_x.kurtosis(),
+                    #     # angular_velocity_x.mean_frequency(),
+                    #     angular_velocity_x.frequency_center()
+                    # ])
                     # features.append(np.array(features_matrix).flatten())
+
+                    for col in df.columns[1:]: # 全特征
+                    # # # for col in df.columns[1:4]: # 角速度特征
+                    # # # for col in df.columns[4:]: # 加速度特征
+                    # # # for col in df.columns[6:]: # z加速度特征
+                    # # # for col in [df.columns[i] for i in [1]]:
+                    # # # for col in [df.columns[i] for i in [3, 4, 5, 6]]:
+                        signal = ImuSignal(df[col])
+                        features_matrix.append(list(signal.features.values()))
+                    features.append(np.array(features_matrix).flatten())
 
         # self.labels = preprocessing.LabelEncoder().fit_transform(np.array(labels))
         self.labels = np.array(labels)
@@ -137,13 +137,13 @@ class SIGNAL_DATASET():
 
     def visualize(self, dimension, feature):
         column = dimension_names.index(dimension) * len(feature_names) + feature_names.index(feature)
-        plt.figure(figsize=(20, 8))
+        plt.figure(figsize=(16, 4))
         sns.boxplot(x='label', y=column, data=self.getDf())
         plt.title(f'Distribution of {dimension} {feature} Across Different Labels')
         plt.ylabel(f'{feature} Value')
         plt.xlabel('Label')
         # plt.show()
-        plt.savefig(f'../selected_feature/features_{dimension}_{feature}.png')
+        plt.savefig(f'../feature/features_{dimension}_{feature}.png')
         plt.close()
 
 

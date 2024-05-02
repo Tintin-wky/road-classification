@@ -175,4 +175,4 @@ if __name__ == "__main__":
     results['svm'] = classify('svm', features=dataset.features_scaled, labels=dataset.labels)
     # results['rf'] = classify('rf', features=dataset.features_scaled, labels=dataset.labels)
     # results['lr'] = classify('lr', features=dataset.features_scaled, labels=dataset.labels)
-    pprint.pprint(results['svm'])
+    pprint.pprint(results)
